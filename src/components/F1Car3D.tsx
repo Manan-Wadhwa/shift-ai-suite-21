@@ -67,28 +67,26 @@ function F1CarModel({ mousePosition }: { mousePosition: { x: number; y: number }
   );
 }
 
-// Uncomment this and use it when you provide your GLTF model
-// function LoadedF1Car({ mousePosition }: { mousePosition: { x: number; y: number } }) {
-//   const groupRef = useRef<THREE.Group>(null);
-//   // Replace 'public/models/f1-car.gltf' with your actual model path
-//   const { scene } = useGLTF('/models/f1-car.gltf');
-//   
-//   useFrame(() => {
-//     if (groupRef.current) {
-//       const targetRotationY = mousePosition.x * 0.5;
-//       const targetRotationX = -mousePosition.y * 0.3;
-//       
-//       groupRef.current.rotation.y += (targetRotationY - groupRef.current.rotation.y) * 0.05;
-//       groupRef.current.rotation.x += (targetRotationX - groupRef.current.rotation.x) * 0.05;
-//     }
-//   });
-//   
-//   return (
-//     <group ref={groupRef}>
-//       <primitive object={scene} scale={1} />
-//     </group>
-//   );
-// }
+function LoadedF1Car({ mousePosition }: { mousePosition: { x: number; y: number } }) {
+  const groupRef = useRef<THREE.Group>(null);
+  const { scene } = useGLTF('/models/f1-car.glb');
+  
+  useFrame(() => {
+    if (groupRef.current) {
+      const targetRotationY = mousePosition.x * 0.5;
+      const targetRotationX = -mousePosition.y * 0.3;
+      
+      groupRef.current.rotation.y += (targetRotationY - groupRef.current.rotation.y) * 0.05;
+      groupRef.current.rotation.x += (targetRotationX - groupRef.current.rotation.x) * 0.05;
+    }
+  });
+  
+  return (
+    <group ref={groupRef} position={[0, -0.5, 0]} scale={0.015}>
+      <primitive object={scene} />
+    </group>
+  );
+}
 
 // Main Canvas Component
 export default function F1Car3D() {
@@ -135,7 +133,7 @@ export default function F1Car3D() {
         <Environment preset="sunset" />
         
         {/* F1 Car */}
-        <F1CarModel mousePosition={mousePosition} />
+        <LoadedF1Car mousePosition={mousePosition} />
         
         {/* Optional: Add a ground plane */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]} receiveShadow>
